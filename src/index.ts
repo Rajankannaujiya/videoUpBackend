@@ -12,8 +12,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 
- db.connect();
-
  createUsersTable();
 createVideoTable();
 
