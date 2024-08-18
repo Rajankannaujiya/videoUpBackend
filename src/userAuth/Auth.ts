@@ -5,9 +5,7 @@ import db from '../db/db';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt'
 
-dotenv.config({path: '../backend/.env'})
-
-console.log("the env in auth", dotenv.config({path: '../backend/.env'}))
+dotenv.config()
 
 const userRouter = Router();
 
