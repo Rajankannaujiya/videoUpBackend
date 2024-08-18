@@ -19,7 +19,6 @@
   "author": "",
   "license": "ISC",
   "description": "Backend for video upload service",
-  
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cloudinary": "^2.3.1",
@@ -32,7 +31,7 @@
     "pg": "^8.12.0",
     "pg-hstore": "^2.3.4"
   },
-"devDependencies": {
+  "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
     "@types/dotenv": "^8.2.0",
@@ -45,5 +44,5 @@
     "rimraf": "^6.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
-  },
+  }
 }
