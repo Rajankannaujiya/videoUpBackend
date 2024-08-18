@@ -7,7 +7,7 @@
             "config": { "includeFiles": ["dist/**"] }
         }
     ],
-    "routes": [
+    "routes": [ 
         {
             "src": "/(.*)",
             "dest": "dist/index.js"
