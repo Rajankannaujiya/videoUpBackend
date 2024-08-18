@@ -2,9 +2,20 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {
-    "start": "ts-node src/index.ts"
+   "scripts": {
+    "start": "nodemon src/index.ts", //====> path should be like this
+    "build": "rimraf dist && tsc",
+    "ts.check": "tsc --project tsconfig.json",
+    "add-build": "git add dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+
+    "pre-commit": [
+    "ts.check",
+    "build",
+    "add-build"
+  ],
+  
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -31,5 +42,9 @@
     "@types/pg": "^8.11.6",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
+     "nodemon": "^3.0.2",
+    "pre-commit": "^1.2.2",
+    "rimraf": "^6.0.0",
+    "typescript": "^5.3.2"
   }
 }
