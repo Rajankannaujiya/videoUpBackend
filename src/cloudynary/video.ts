@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import {v2} from 'cloudinary'
 // import { string } from 'zod';
 import fs from 'fs';
-dotenv.config({path: '../backend/.env'})
+dotenv.config()
 
 
 v2.config({
