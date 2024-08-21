@@ -13,18 +13,18 @@ v2.config({
 
 
 
-export async function uploadVideoOnCloudinary (videoPath:string){
+export async function uploadOnCloudinary (mediaPath:string){
 try {
-        if(!videoPath){
+        if(!mediaPath){
             console.log("no video provided");
             return null
         }
-        const result =await v2.uploader.upload(videoPath, {resource_type: "video", folder: "mystuffs"
+        const result =await v2.uploader.upload(mediaPath, {resource_type: "auto", folder: "mystuffs"
            
-      });
+      }); // auto to let cloudinary decide that whether it is photo or video
     
       console.log("upload result",result)
-        fs.unlinkSync(videoPath);  // delete local copy after it's been uploaded to cloudinary
+        fs.unlinkSync(mediaPath);  // delete local copy after it's been uploaded to cloudinary
         return result;
 } catch (error) {
     console.log("error while uploading",error);
@@ -34,12 +34,12 @@ try {
 
 
 
-export async function fetchSingleVideoFromCloudinary(videoId:string) {
+export async function fetchSingleFromCloudinary(mediaId:string) {
    try {
-     if(!videoId){
+     if(!mediaId){
          throw new Error("videoId is not provide");
      }
-     const result = await v2.api.resource(videoId, {resource_type: "video"})
+     const result = await v2.api.resource(mediaId, {resource_type: "video"})
      return result;
    } catch (error) {
     console.log("error while fetching video",error);
@@ -60,14 +60,14 @@ export async function fetchAllVideosFromCloudinary() {
  }
 
 
-export async function deleteVideoFromCloudinary(publicId:string) {
+export async function deleteFromCloudinary(video_url: string, publicId: string) {
 try {
     console.log("public id", publicId)
     if ( !publicId) {
         throw new Error ("publicId is required")
     }
      const result = await v2.uploader
-      .destroy(publicId,{ resource_type: "video" });
+      .destroy(publicId,{ resource_type: `${video_url.includes("image") ? "image" : "video"}` },)
       
     
       if(result){

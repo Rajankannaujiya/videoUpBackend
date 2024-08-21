@@ -16,9 +16,7 @@ interface AuthenticatedRequest extends Request {
       res.status(401).json({ error: "Unauthorized" });
       return;
     }
-  
-    const token = jwtToken.split(' ')[1];
-  
+
     const secret = process.env.MY_SECRET;
     if (!secret) {
       res.status(404).json({ error: "Secret not found" });
@@ -28,7 +26,7 @@ interface AuthenticatedRequest extends Request {
     
     let payload:any;
     try {
-      payload = verify(token, secret);
+      payload = verify(jwtToken , secret);
       
     } catch (error) {
       res.status(401).json({ error: "Unauthorized! Invalid token" });

@@ -5,8 +5,9 @@ import db from '../db/db';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt'
 
-dotenv.config()
+dotenv.config({path:'../../.env'})
 
+console.log(dotenv.config({path:'./.env'}))
 const userRouter = Router();
 
 // src/userAuth/Auth.ts

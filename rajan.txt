@@ -1,0 +1,14 @@
+// "scripts": {
+  //   "start": "nodemon src/index.ts",
+  //   "build": "rimraf dist && tsc",
+  //   "dev": "nodemon src/index.ts",
+  //   "ts.check": "tsc --noEmit",
+  //   "predeploy": "npm run build",
+  //   "deploy": "vercel --prod"
+  // },
+
+   "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts"
+  },
