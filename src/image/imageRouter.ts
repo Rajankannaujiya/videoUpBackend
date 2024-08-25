@@ -2,7 +2,7 @@
 
 import { Router } from "express";
 import userMiddleware from "../midleware/user";
-import { deletImage, getAllimages, getOneimage, postInfo, updateImageFromDb, uploadImageToDb } from "./image";
+import { deletImage, getAllimages, getOneimage, updateImageFromDb, uploadImageToDb } from "./image";
 import { upload } from "../midleware/multer";
 
 const imageRouter = Router();
@@ -26,7 +26,5 @@ imageRouter.route("/update/:imageId").put(upload.fields([{
     name: "imagePath",
     maxCount: 1
 }]),updateImageFromDb);
-
-imageRouter.route("/post").get(postInfo)
 
 export default imageRouter;

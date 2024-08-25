@@ -154,7 +154,20 @@ const getOnevideo = expressAsyncHandler(async (req, res) => {
       return;
     }
 
-    const videoText = `SELECT video_url, title , description FROM videos WHERE id =$1`;
+    const videoText = `SELECT 
+          videos.id AS id,
+          videos.video_public_id, 
+          videos.video_url, 
+          videos.title,
+          videos.description, 
+          videos.duration,
+          videos.created_at, 
+          videos.updated_at, 
+          my_users.username, 
+          my_users.email 
+        FROM videos
+        JOIN my_users ON videos.owner_id = my_users.id
+         WHERE videos.id = $1`;
     const value = [videoId];
 
     const getVideo = await db.query(videoText, value);
@@ -164,7 +177,9 @@ const getOnevideo = expressAsyncHandler(async (req, res) => {
       return;
     }
 
-    res.status(200).json({ videoDetails: getVideo.rows });
+    console.log("this is the video",getVideo.rows)
+
+    res.status(200).json({ singleVideo: getVideo.rows });
   } catch (error) {
     console.log("error while getting video", error);
     throw new Error("an error occured while getting video");
@@ -249,7 +264,6 @@ const deleteVideo = expressAsyncHandler(async (req: variableRequest, res) => {
       .status(200)
       .json({
         message: "Video deleted successfully",
-        videoId: deleteResult.rows[0].id,
         cloudinaryDelete: resultOfCloudinary,
       });
     return;
