@@ -11,6 +11,14 @@ app.use(cors({
  origin: "*";
 }
  ));
+
+app.use(compression(
+    {
+        level:6,
+        threshold:100 * 1000
+    }
+))
+
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: false ,limit:1000000000}));
 
