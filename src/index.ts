@@ -1,6 +1,7 @@
 
 import express from 'express'
 import cors from 'cors'
+import compression from 'compression'
 
 import { createImageTable, createUsersTable, createVideoTable} from './db/table';
 
