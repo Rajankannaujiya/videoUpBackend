@@ -4,14 +4,39 @@ import { Router } from 'express';
 import db from '../db/db';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt'
-
+import { JwtPayload } from "jsonwebtoken";  
+import { Request,Response } from "express";
+import { createClient } from 'redis';
+import userMiddleware from '../midleware/user';
 dotenv.config({path:'../../.env'})
 
 console.log(dotenv.config({path:'./.env'}))
 const userRouter = Router();
 
+
+
+
+const client = createClient({
+    password: process.env.REDIS_PASSWORD,
+    socket: {
+        host: process.env.REDIS_HOST,
+        port: Number(process.env.REDIS_PORT) || 16609
+    },
+   pingInterval:1000
+  
+});
+
+client.on('error', (err) => console.error('Redis Client Error', err));
+
+client.connect();
+
+
+interface variableRequest extends Request{
+  userId?: string
+}
 // src/userAuth/Auth.ts
  // Adjust the path as needed
+ 
 
 const router = Router();
 
@@ -108,5 +133,47 @@ userRouter.post("/signin",async(req,res)=>{
     return res.status(500).json({ error: 'An error occurred while signing in' });
   }
 })
+
+const blacklist = new Set<string>();
+
+userRouter.get('/logout',userMiddleware, async (req: variableRequest, res: Response): Promise<void> => {
+  try {
+    // Extract token from authorization header
+    const jwtToken = req.headers['authorization'];
+
+    
+    if (!jwtToken || typeof jwtToken !== 'string') {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+    
+    const secret = process.env.MY_SECRET;
+    if (!secret) {
+      res.status(500).json({ error: 'JWT secret not found' });
+      return;
+    }
+    
+    const decoded = jwt.verify(jwtToken, secret as string) as JwtPayload;
+
+    console.log("this is the userId",req.userId)
+
+    if (req.userId === decoded.userId) {
+     
+
+      await client.set(jwtToken, 'blacklisted', {
+        EX: 1, // Expire immediately
+      });
+
+      req.userId = undefined;
+      res.status(200).json({ message: 'Logout successful, token invalidated.' });
+    } else {
+      res.status(401).json({ error: 'Token is invalid or does not match' });
+    }
+  } catch (error) {
+    console.error('Error during logout:', error);
+    res.status(500).json({ error: 'An error occurred during logout' });
+  }
+});
+
 
 export default userRouter;

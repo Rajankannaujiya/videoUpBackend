@@ -1,13 +1,14 @@
-
+import express from 'express'
 import { Router } from "express";
 import userMiddleware from "../midleware/user";
 import { deleteVideo, getAllvideo, getOnevideo, updateVideoFromDb, uploadVideoToDb } from "./video";
 import { upload } from "../midleware/multer";
+import { decompressMiddleware } from '../midleware/decompress';
 
 const videoRouter = Router();
 
 
-videoRouter.use(userMiddleware)
+videoRouter.use(userMiddleware) 
 
 videoRouter.route('/publishvideo').post(upload.fields([{
     name: "videoPath",

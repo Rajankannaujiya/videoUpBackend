@@ -9,7 +9,7 @@ import { createImageTable, createUsersTable, createVideoTable} from './db/table'
 const app = express();
 app.use(cors());
 app.use(express.json()); 
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false ,limit:1000000000}));
 
 
 
@@ -26,10 +26,12 @@ app.get("/",(req, res)=>{
 import userRouter from './userAuth/Auth';
 import videoRouter from './video/vedeoRouter';
 import imageRouter from './image/imageRouter';
+import { postRouter } from './post/postRouter';
 
 app.use('/api/v1/user', userRouter); 
 app.use('/api/v1/video',videoRouter )
 app.use('/api/v1/image',imageRouter )
+app.use('/api/v1/post',postRouter)
 
 
 const port =3000
