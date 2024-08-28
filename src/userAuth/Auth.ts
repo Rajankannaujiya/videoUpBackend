@@ -6,36 +6,11 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt'
 import { JwtPayload } from "jsonwebtoken";  
 import { Request,Response } from "express";
-import { createClient } from 'redis';
 import userMiddleware from '../midleware/user';
 dotenv.config({path:'../../.env'})
 
 console.log(dotenv.config({path:'./.env'}))
 const userRouter = Router();
-
-
-
-
-const client = createClient({
-    password: process.env.REDIS_PASSWORD,
-    socket: {
-        host: process.env.REDIS_HOST,
-        port: Number(process.env.REDIS_PORT) || 16609,
-    },
-    pingInterval: 1000,
-});
-
-client.on('error', (err) => {
-    console.error('Redis Client Error:', err);
-});
-
-client.on('connect', () => {
-    console.log('Redis Client Connected');
-});
-
-// Optional: Handle successful connection
-client.connect()
-    .catch(err => console.error('Failed to connect to Redis:', err));
 
 
 interface variableRequest extends Request{
@@ -141,8 +116,6 @@ userRouter.post("/signin",async(req,res)=>{
   }
 })
 
-const blacklist = new Set<string>();
-
 userRouter.get('/logout',userMiddleware, async (req: variableRequest, res: Response): Promise<void> => {
   try {
     // Extract token from authorization header
@@ -162,15 +135,9 @@ userRouter.get('/logout',userMiddleware, async (req: variableRequest, res: Respo
     
     const decoded = jwt.verify(jwtToken, secret as string) as JwtPayload;
 
-    console.log("this is the userId",req.userId)
 
     if (req.userId === decoded.userId) {
      
-
-      await client.set(jwtToken, 'blacklisted', {
-        EX: 1, // Expire immediately
-      });
-
       req.userId = undefined;
       res.status(200).json({ message: 'Logout successful, token invalidated.' });
     } else {
