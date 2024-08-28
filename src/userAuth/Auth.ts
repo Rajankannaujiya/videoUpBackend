@@ -20,15 +20,22 @@ const client = createClient({
     password: process.env.REDIS_PASSWORD,
     socket: {
         host: process.env.REDIS_HOST,
-        port: Number(process.env.REDIS_PORT) || 16609
+        port: Number(process.env.REDIS_PORT) || 16609,
     },
-   pingInterval:1000
-  
+    pingInterval: 1000,
 });
 
-client.on('error', (err) => console.error('Redis Client Error', err));
+client.on('error', (err) => {
+    console.error('Redis Client Error:', err);
+});
 
-client.connect();
+client.on('connect', () => {
+    console.log('Redis Client Connected');
+});
+
+// Optional: Handle successful connection
+client.connect()
+    .catch(err => console.error('Failed to connect to Redis:', err));
 
 
 interface variableRequest extends Request{
