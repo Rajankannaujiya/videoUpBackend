@@ -9,7 +9,7 @@ import { createImageTable, createUsersTable, createVideoTable} from './db/table'
 
 const app = express();
 app.use(cors({
- origin: "*",
+ origin: ["*","https://video-up-frontend.vercel.app/"]
 }
  ));
 
